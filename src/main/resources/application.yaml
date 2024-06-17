@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: deblock-flights-api
+
+server:
+  port: 8080
+
+crazyair_api:
+  base_uri: http://localhost:8081/crazyair
+  enabled: true
+
+toughjet_api:
+  base_uri: http://localhost:8082/toughjet
+  enabled: true
