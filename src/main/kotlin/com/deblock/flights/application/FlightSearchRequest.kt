@@ -1,7 +1,5 @@
 package com.deblock.flights.application
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import java.time.Clock
 import java.time.LocalDate
 
 data class FlightSearchRequest(
@@ -10,8 +8,6 @@ data class FlightSearchRequest(
     val departureDate: LocalDate,
     val returnDate: LocalDate,
     val numberOfPassengers: Int,
-    @JsonIgnore
-    val clock: Clock = Clock.systemUTC()
 ) {
     fun validate() {
         val validationErrors = mutableListOf<String>()
@@ -21,10 +17,10 @@ data class FlightSearchRequest(
         if (destination.isBlank() || destination.length != 3) {
             validationErrors.add("Destination is invalid")
         }
-        if (departureDate.isBefore(LocalDate.now(clock))) {
+        if (departureDate.isBefore(LocalDate.now())) {
             validationErrors.add("Departure date cannot be in the past")
         }
-        if (returnDate.isBefore(LocalDate.now(clock))) {
+        if (returnDate.isBefore(LocalDate.now())) {
             validationErrors.add("Return date cannot be in the past")
         }
         if (returnDate.isBefore(departureDate)) {
