@@ -31,7 +31,7 @@ This should return a response like this:
     "supplier": "CrazyAir",
     "fare": 450.00,
     "departureAirportCode": "LHR",
-    "destinationAirportCode": "LHR",
+    "destinationAirportCode": "DXB",
     "departureDate": "2024-07-01T08:00:00",
     "arrivalDate": "2024-07-10T08:00:00"
   },
@@ -49,7 +49,7 @@ This should return a response like this:
     "supplier": "CrazyAir",
     "fare": 550.00,
     "departureAirportCode": "LHR",
-    "destinationAirportCode": "LHR",
+    "destinationAirportCode": "DXB",
     "departureDate": "2024-07-01T08:00:00",
     "arrivalDate": "2024-07-10T08:00:00"
   },
@@ -58,7 +58,7 @@ This should return a response like this:
     "supplier": "CrazyAir",
     "fare": 650.00,
     "departureAirportCode": "LHR",
-    "destinationAirportCode": "LHR",
+    "destinationAirportCode": "DXB",
     "departureDate": "2024-07-01T08:00:00",
     "arrivalDate": "2024-07-10T08:00:00"
   },
@@ -76,7 +76,7 @@ This should return a response like this:
     "supplier": "CrazyAir",
     "fare": 750.00,
     "departureAirportCode": "LHR",
-    "destinationAirportCode": "LHR",
+    "destinationAirportCode": "DXB",
     "departureDate": "2024-07-01T08:00:00",
     "arrivalDate": "2024-07-10T08:00:00"
   },
