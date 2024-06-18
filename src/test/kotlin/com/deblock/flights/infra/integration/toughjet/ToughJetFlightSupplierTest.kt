@@ -69,6 +69,8 @@ class ToughJetFlightSupplierTest {
         assertThat(flight.supplier).isEqualTo(toughJetFlightSupplier.name)
         assertThat(flight.departureDate).isEqualTo(LocalDateTime.of(departureDate, LocalTime.of(8, 0)))
         assertThat(flight.arrivalDate).isEqualTo(LocalDateTime.of(returnDate, LocalTime.of(8, 0)))
+        assertThat(flight.departureAirportCode.name).isEqualTo(toughJetFlight.departureAirportName)
+        assertThat(flight.destinationAirportCode.name).isEqualTo(toughJetFlight.arrivalAirportName)
     }
 
     @Test

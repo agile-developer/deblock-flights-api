@@ -1,6 +1,7 @@
 package com.deblock.flights.infra.integration.toughjet
 
 import com.deblock.flights.application.FlightSearchRequest
+import com.deblock.flights.domain.Airport
 import com.deblock.flights.domain.Flight
 import org.slf4j.LoggerFactory
 import java.math.BigDecimal
@@ -22,8 +23,8 @@ object ToughJetSearchConverter {
                 carrier,
                 "ToughJet",
                 calculateFare(basePrice, tax, discount),
-                departureAirportName,
-                arrivalAirportName,
+                Airport.valueOf(departureAirportName),
+                Airport.valueOf(arrivalAirportName),
                 LocalDateTime.ofInstant(outboundDateTime, ZoneOffset.UTC),
                 LocalDateTime.ofInstant(inboundDateTime, ZoneOffset.UTC)
             )

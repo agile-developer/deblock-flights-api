@@ -66,6 +66,8 @@ class CrazyAirFlightSupplierTest {
         assertThat(flight.supplier).isEqualTo(crazyAirFlightSupplier.name)
         assertThat(flight.departureDate).isEqualTo(crazyAirFlight.departureDate)
         assertThat(flight.arrivalDate).isEqualTo(crazyAirFlight.arrivalDate)
+        assertThat(flight.departureAirportCode.name).isEqualTo(crazyAirFlight.departureAirportCode)
+        assertThat(flight.destinationAirportCode.name).isEqualTo(crazyAirFlight.destinationAirportCode)
     }
 
     @Test

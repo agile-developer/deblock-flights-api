@@ -1,6 +1,7 @@
 package com.deblock.flights.infra.integration.crazyair
 
 import com.deblock.flights.application.FlightSearchRequest
+import com.deblock.flights.domain.Airport
 import com.deblock.flights.domain.Flight
 
 object CrazyAirSearchConverter {
@@ -16,8 +17,8 @@ object CrazyAirSearchConverter {
                 airline,
                 "CrazyAir",
                 price,
-                departureAirportCode,
-                destinationAirportCode,
+                Airport.valueOf(departureAirportCode),
+                Airport.valueOf(destinationAirportCode),
                 departureDate,
                 arrivalDate
             )
