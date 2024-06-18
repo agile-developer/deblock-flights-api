@@ -84,4 +84,31 @@ class FlightSearchControllerTest {
         val invalidRequestException = result.asyncResult as InvalidRequestException
         assertThat(invalidRequestException.message).isEqualTo("Passenger count must be greater than zero and maximum 4")
     }
+
+    @Test
+    fun `should return an error when request has the same origin and destination`(): Unit = runBlocking {
+        // arrange
+
+        // act
+        val searchRequestJson = """
+			{
+				"origin": "LHR",
+				"destination": "LHR",
+				"departureDate": "2024-09-01",
+				"returnDate": "2024-09-10",
+				"numberOfPassengers": 4
+			}
+		""".trimIndent()
+        val result = mockMvc.perform(
+            post("/deblock/flights")
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .content(searchRequestJson)
+        ).andReturn()
+
+        // assert
+        //assertThat(result.response.status).isEqualTo(400)
+        val invalidRequestException = result.asyncResult as InvalidRequestException
+        assertThat(invalidRequestException.message).isEqualTo("Origin and destination cannot be the same")
+    }
 }

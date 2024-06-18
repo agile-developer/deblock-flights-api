@@ -17,6 +17,9 @@ data class FlightSearchRequest(
         if (destination.isBlank() || destination.length != 3) {
             validationErrors.add("Destination is invalid")
         }
+        if (origin == destination) {
+            validationErrors.add("Origin and destination cannot be the same")
+        }
         if (departureDate.isBefore(LocalDate.now())) {
             validationErrors.add("Departure date cannot be in the past")
         }
