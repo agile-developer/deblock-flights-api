@@ -31,7 +31,7 @@ class CrazyAirFlightSupplier(
         val flightSearchResponseListTypeRef =
             object : ParameterizedTypeReference<List<CrazyAirFlightSearchResponse>>() {}
 
-        return runCatching {
+        val httpResponse = runCatching {
             val crazyAirFlightSearchResponse: ResponseEntity<List<CrazyAirFlightSearchResponse>> = restClient.post()
                 .uri("$baseUri/flights")
                 .contentType(APPLICATION_JSON)
@@ -39,20 +39,20 @@ class CrazyAirFlightSupplier(
                 .body(convertRequest(searchRequest))
                 .retrieve()
                 .toEntity(flightSearchResponseListTypeRef)
-            val statusCode = crazyAirFlightSearchResponse.statusCode
-            logger.info("Received HTTP status code: $statusCode, from supplier: $name")
-
-            return@runCatching when (statusCode) {
-                HttpStatus.OK -> {
-                    val flights = crazyAirFlightSearchResponse.body?.map { convertResponse(it) } ?: emptyList()
-                    if (flights.isNotEmpty()) SearchResult.Found(flights) else SearchResult.Empty
-                }
-
-                else -> SearchResult.Error(name)
-            }
+            crazyAirFlightSearchResponse
         }.getOrElse { exception ->
-            logger.error("Exception encountered calling supplier $name: ${exception.message}")
-            SearchResult.Error(name)
+            logger.error("Encountered exception calling supplier $name: ${exception.message}")
+            return SearchResult.Error(name)
+        }
+
+        logger.info("Received HTTP status code: ${httpResponse.statusCode}, from supplier: $name")
+        return when (httpResponse.statusCode) {
+            HttpStatus.OK -> {
+                val flights = httpResponse.body?.map { convertResponse(it) } ?: emptyList()
+                if (flights.isNotEmpty()) SearchResult.Found(flights) else SearchResult.Empty
+            }
+
+            else -> SearchResult.Error(name)
         }
     }
 

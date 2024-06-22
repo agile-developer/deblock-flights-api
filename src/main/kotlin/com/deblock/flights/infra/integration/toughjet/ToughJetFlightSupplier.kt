@@ -31,7 +31,7 @@ class ToughJetFlightSupplier(
         val flightSearchResponseListTypeRef =
             object : ParameterizedTypeReference<List<ToughJetFlightSearchResponse>>() {}
 
-        return runCatching {
+        val httpResponse = runCatching {
             val toughJetFlightSearchResponse: ResponseEntity<List<ToughJetFlightSearchResponse>> = restClient.post()
                 .uri("$baseUri/flights")
                 .contentType(APPLICATION_JSON)
@@ -39,20 +39,20 @@ class ToughJetFlightSupplier(
                 .body(convertRequest(searchRequest))
                 .retrieve()
                 .toEntity(flightSearchResponseListTypeRef)
-            val statusCode = toughJetFlightSearchResponse.statusCode
-            logger.info("Received HTTP status code $statusCode from supplier: $name")
-
-            return@runCatching when (statusCode) {
-                HttpStatus.OK -> {
-                    val flights = toughJetFlightSearchResponse.body?.map { convertResponse(it) } ?: emptyList()
-                    if (flights.isNotEmpty()) SearchResult.Found(flights) else SearchResult.Empty
-                }
-
-                else -> SearchResult.Error(name)
-            }
+            toughJetFlightSearchResponse
         }.getOrElse { exception ->
             logger.error("Encountered exception calling supplier $name: ${exception.message}")
-            SearchResult.Error(name)
+            return SearchResult.Error(name)
+        }
+
+        logger.info("Received HTTP status code: ${httpResponse.statusCode}, from supplier: $name")
+        return when (httpResponse.statusCode) {
+            HttpStatus.OK -> {
+                val flights = httpResponse.body?.map { convertResponse(it) } ?: emptyList()
+                if (flights.isNotEmpty()) SearchResult.Found(flights) else SearchResult.Empty
+            }
+
+            else -> SearchResult.Error(name)
         }
     }
 
