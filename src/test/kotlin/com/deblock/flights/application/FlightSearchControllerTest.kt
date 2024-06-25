@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import java.time.LocalDate
 
-@WebMvcTest(com.deblock.flights.application.FlightSearchController::class)
+@WebMvcTest(FlightSearchController::class)
 class FlightSearchControllerTest {
 
     @Autowired
@@ -110,5 +110,33 @@ class FlightSearchControllerTest {
         //assertThat(result.response.status).isEqualTo(400)
         val invalidRequestException = result.asyncResult as InvalidRequestException
         assertThat(invalidRequestException.message).isEqualTo("Origin and destination cannot be the same")
+    }
+
+    @Test
+    fun `should return an error when request has an invalid 'sortBy' value`(): Unit = runBlocking {
+        // arrange
+
+        // act
+        val searchRequestJson = """
+			{
+				"origin": "LHR",
+				"destination": "DXB",
+				"departureDate": "2024-09-01",
+				"returnDate": "2024-09-10",
+				"numberOfPassengers": 4,
+                "sortBy": "UNKNOWN"
+			}
+		""".trimIndent()
+        val result = mockMvc.perform(
+            post("/deblock/flights")
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .content(searchRequestJson)
+        ).andReturn()
+
+        // assert
+        //assertThat(result.response.status).isEqualTo(400)
+        val invalidRequestException = result.asyncResult as InvalidRequestException
+        assertThat(invalidRequestException.message).isEqualTo("Sort by field: UNKNOWN is invalid")
     }
 }

@@ -15,5 +15,5 @@ class AggregatorApplication {
 }
 
 fun main(args: Array<String>) {
-	runApplication<com.deblock.flights.AggregatorApplication>(*args)
+	runApplication<AggregatorApplication>(*args)
 }

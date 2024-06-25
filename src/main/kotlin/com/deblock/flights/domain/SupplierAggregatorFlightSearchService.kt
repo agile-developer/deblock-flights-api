@@ -1,6 +1,9 @@
 package com.deblock.flights.domain
 
 import com.deblock.flights.application.FlightSearchRequest
+import com.deblock.flights.domain.SortBy.AIRLINE
+import com.deblock.flights.domain.SortBy.FARE
+import com.deblock.flights.domain.SortBy.SUPPLIER
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -38,7 +41,13 @@ class SupplierAggregatorFlightSearchService(
                 .filterIsInstance<SearchResult.Found>()
                 .map { it.flights }
                 .flatten()
-                .sortedBy { it.fare }
+                .let { flights ->
+                    when(SortBy.valueOf(searchRequest.sortBy.uppercase())) {
+                        FARE -> flights.sortedBy { it.fare }
+                        AIRLINE -> flights.sortedBy { it.airline }
+                        SUPPLIER -> flights.sortedBy { it.supplier }
+                    }
+                }
                 .let { SearchResult.Found(it) }
         }
     }

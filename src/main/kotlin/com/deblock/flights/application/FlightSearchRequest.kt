@@ -1,5 +1,6 @@
 package com.deblock.flights.application
 
+import com.deblock.flights.domain.SortBy
 import java.time.LocalDate
 
 data class FlightSearchRequest(
@@ -8,6 +9,7 @@ data class FlightSearchRequest(
     val departureDate: LocalDate,
     val returnDate: LocalDate,
     val numberOfPassengers: Int,
+    val sortBy: String = "FARE"
 ) {
     fun validate() {
         val validationErrors = mutableListOf<String>()
@@ -32,8 +34,12 @@ data class FlightSearchRequest(
         if (numberOfPassengers < 1 || numberOfPassengers > 4) {
             validationErrors.add("Passenger count must be greater than zero and maximum 4")
         }
+        runCatching {
+            SortBy.valueOf(sortBy.uppercase())
+        }.getOrElse {
+            validationErrors.add("Sort by field: $sortBy is invalid")
+        }
 
         if (validationErrors.isNotEmpty()) throw InvalidRequestException(validationErrors)
     }
 }
-
